@@ -71,14 +71,15 @@
         return nil;
     }
 
-    // Ensure terminal slash for baseURL path, so that NSURL +URLWithString:relativeToURL: works as expected
+    // 截取掉最后的'/'
     if ([[url path] length] > 0 && ![[url absoluteString] hasSuffix:@"/"]) {
         url = [url URLByAppendingPathComponent:@""];
     }
-
+    //请求路径
     self.baseURL = url;
-
+    //请求器
     self.requestSerializer = [AFHTTPRequestSerializer serializer];
+    //解码器
     self.responseSerializer = [AFJSONResponseSerializer serializer];
 
     return self;
@@ -115,7 +116,7 @@
                       success:(void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable))success
                       failure:(void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nonnull))failure
 {
-
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"GET"
                                                         URLString:URLString
                                                        parameters:parameters
@@ -134,6 +135,7 @@
                        success:(void (^)(NSURLSessionDataTask *task))success
                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"HEAD" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil success:^(NSURLSessionDataTask *task, __unused id responseObject) {
         if (success) {
             success(task);
@@ -159,6 +161,7 @@
                        success:(void (^)(NSURLSessionDataTask * _Nonnull, id _Nullable))success
                        failure:(void (^)(NSURLSessionDataTask * _Nullable, NSError * _Nonnull))failure
 {
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"POST" URLString:URLString parameters:parameters uploadProgress:uploadProgress downloadProgress:nil success:success failure:failure];
 
     [dataTask resume];
@@ -183,6 +186,8 @@
                        failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
     NSError *serializationError = nil;
+    //将block的数据以流的形式分片上传
+    //边拼边传、而不是拼好了一起传
     NSMutableURLRequest *request = [self.requestSerializer multipartFormRequestWithMethod:@"POST" URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters constructingBodyWithBlock:block error:&serializationError];
     if (serializationError) {
         if (failure) {
@@ -197,6 +202,8 @@
         return nil;
     }
 
+    //这个就回到AFURLSessionManager的原生方法了
+    //通过req生成一个分段数据任务
     __block NSURLSessionDataTask *task = [self uploadTaskWithStreamedRequest:request progress:uploadProgress completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
         if (error) {
             if (failure) {
@@ -219,6 +226,7 @@
                       success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                       failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"PUT" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil success:success failure:failure];
 
     [dataTask resume];
@@ -231,6 +239,7 @@
                         success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                         failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"PATCH" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil success:success failure:failure];
 
     [dataTask resume];
@@ -243,6 +252,7 @@
                          success:(void (^)(NSURLSessionDataTask *task, id responseObject))success
                          failure:(void (^)(NSURLSessionDataTask *task, NSError *error))failure
 {
+    //所有只需要url和参数的请求都要汇聚于此
     NSURLSessionDataTask *dataTask = [self dataTaskWithHTTPMethod:@"DELETE" URLString:URLString parameters:parameters uploadProgress:nil downloadProgress:nil success:success failure:failure];
 
     [dataTask resume];
@@ -259,6 +269,7 @@
                                          failure:(void (^)(NSURLSessionDataTask *, NSError *))failure
 {
     NSError *serializationError = nil;
+    //生成一个可变请求
     NSMutableURLRequest *request = [self.requestSerializer requestWithMethod:method URLString:[[NSURL URLWithString:URLString relativeToURL:self.baseURL] absoluteString] parameters:parameters error:&serializationError];
     if (serializationError) {
         if (failure) {
@@ -274,15 +285,19 @@
     }
 
     __block NSURLSessionDataTask *dataTask = nil;
+    //这个就回到AFURLSessionManager的原生方法了
+    //通过req生成一个数据任务
     dataTask = [self dataTaskWithRequest:request
                           uploadProgress:uploadProgress
                         downloadProgress:downloadProgress
                        completionHandler:^(NSURLResponse * __unused response, id responseObject, NSError *error) {
         if (error) {
+            //失败
             if (failure) {
                 failure(dataTask, error);
             }
         } else {
+            //成功
             if (success) {
                 success(dataTask, responseObject);
             }

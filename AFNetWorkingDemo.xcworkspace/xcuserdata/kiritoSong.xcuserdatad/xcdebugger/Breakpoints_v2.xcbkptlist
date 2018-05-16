@@ -2,4 +2,118 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+            timestampString = "548069422.538094"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "379"
+            endingLineNumber = "379"
+            landmarkName = "-multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AFHTTPRequestSerializer multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:]"
+                  moduleName = "AFNetWorkingDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kiritoSong/Desktop/%E5%8D%9A%E5%AE%A2/KTAFNetWorkingDemo/AFNetWorkingDemo/Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+                  timestampString = "548069422.915653"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "379"
+                  endingLineNumber = "379"
+                  offsetFromSymbolStart = "211">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AFHTTPRequestSerializer multipartFormRequestWithMethod:URLString:parameters:constructingBodyWithBlock:error:]"
+                  moduleName = "AFNetWorkingDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kiritoSong/Desktop/%E5%8D%9A%E5%AE%A2/KTAFNetWorkingDemo/AFNetWorkingDemo/Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+                  timestampString = "548069422.9192671"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "379"
+                  endingLineNumber = "379"
+                  offsetFromSymbolStart = "249">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+            timestampString = "548069434.727002"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "355"
+            endingLineNumber = "355"
+            landmarkName = "-requestWithMethod:URLString:parameters:error:"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+            timestampString = "548069459.953113"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "415"
+            endingLineNumber = "415"
+            landmarkName = "-requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AFHTTPRequestSerializer requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:]"
+                  moduleName = "AFNetWorkingDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kiritoSong/Desktop/%E5%8D%9A%E5%AE%A2/KTAFNetWorkingDemo/AFNetWorkingDemo/Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+                  timestampString = "548069460.16818"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "415"
+                  endingLineNumber = "415"
+                  offsetFromSymbolStart = "497">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "-[AFHTTPRequestSerializer requestWithMultipartFormRequest:writingStreamContentsToFile:completionHandler:]"
+                  moduleName = "AFNetWorkingDemo"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/kiritoSong/Desktop/%E5%8D%9A%E5%AE%A2/KTAFNetWorkingDemo/AFNetWorkingDemo/Pods/AFNetworking/AFNetworking/AFURLRequestSerialization.m"
+                  timestampString = "548069460.171483"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "415"
+                  endingLineNumber = "415"
+                  offsetFromSymbolStart = "548">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

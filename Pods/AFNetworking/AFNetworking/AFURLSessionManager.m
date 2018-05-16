@@ -667,6 +667,7 @@ static NSString * const AFNSURLSessionTaskDidSuspendNotification = @"com.alamofi
     //线程安全
     [self.lock lock];
     //将delegate 与 task绑定
+    //task.taskIdentifier 是由session统一分配的标识符
     self.mutableTaskDelegatesKeyedByTaskIdentifier[@(task.taskIdentifier)] = delegate;
     //为AFTaskDelegate设置 task 的进度监听
     [delegate setupProgressForTask:task];
@@ -895,6 +896,7 @@ static NSString * const AFNSURLSessionTaskDidSuspendNotification = @"com.alamofi
 {
     __block NSURLSessionUploadTask *uploadTask = nil;
     url_session_manager_create_task_safely(^{
+        //将数据以流的形式分段上传
         uploadTask = [self.session uploadTaskWithStreamedRequest:request];
     });
 
@@ -1084,9 +1086,11 @@ willPerformHTTPRedirection:(NSHTTPURLResponse *)response
         newRequest:(NSURLRequest *)request
  completionHandler:(void (^)(NSURLRequest *))completionHandler
 {
+    //默认为当前链接
     NSURLRequest *redirectRequest = request;
 
     if (self.taskWillPerformHTTPRedirection) {
+        //如果用户实现了重定向、则采用用户的反馈
         redirectRequest = self.taskWillPerformHTTPRedirection(session, task, response, request);
     }
 
@@ -1174,15 +1178,15 @@ didCompleteWithError:(NSError *)error
 {
     AFURLSessionManagerTaskDelegate *delegate = [self delegateForTask:task];
 
-    // delegate may be nil when completing a task in the background
     if (delegate) {
-        //我一直很好奇为什么AFURLSessionManagerTaskDelegate与session没有绑定delegate也能调用代理方法
-        //原来是由manager主动调用的
+        //我之前一直很好奇为什么AFURLSessionManagerTaskDelegate与session没有绑定delegate也能调用代理方法
+        //原来是由manager主动调用的--里面的回调是task级别、也就是创建task时的block
         [delegate URLSession:session task:task didCompleteWithError:error];
 
         [self removeDelegateForTask:task];
     }
-    //这个比传统的session好、可以分别从session和task方面获取任务的结束
+    
+    //你也可以手动回去完成信息--这个是session级别的。
     if (self.taskDidComplete) {
         self.taskDidComplete(session, task, error);
     }

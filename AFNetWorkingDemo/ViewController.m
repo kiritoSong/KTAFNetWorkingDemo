@@ -7,7 +7,6 @@
 //
 
 #import "ViewController.h"
-#import "TableViewCell.h"
 #import <AFNetworking.h>
 
 @interface ViewController ()
@@ -52,6 +51,9 @@
 
     NSURLSessionConfiguration * configuration = [NSURLSessionConfiguration defaultSessionConfiguration];
     AFURLSessionManager * manager = [[AFURLSessionManager alloc]initWithSessionConfiguration:configuration];
+    
+    
+    
     
     //如果不添加反序列化、有可能会报错说传回来的res是text/html。
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];
@@ -241,6 +243,9 @@
         }
         
     }] resume];
+    
+    
+    
 }
 
 
