@@ -19,8 +19,13 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
 
-    [self NSURLSessionConfigurationTest];
     
+    
+}
+
++(NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
+    
+    return [super keyPathsForValuesAffectingValueForKey:key];
 }
 
 
