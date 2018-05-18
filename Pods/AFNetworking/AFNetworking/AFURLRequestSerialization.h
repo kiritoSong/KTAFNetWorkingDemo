@@ -31,27 +31,25 @@
 NS_ASSUME_NONNULL_BEGIN
 
 /**
- Returns a percent-escaped string following RFC 3986 for a query string key or value.
- RFC 3986 states that the following characters are "reserved" characters.
- - General Delimiters: ":", "#", "[", "]", "@", "?", "/"
- - Sub-Delimiters: "!", "$", "&", "'", "(", ")", "*", "+", ",", ";", "="
+ 为查询的键值对返回一个符合RFC 3986规范的转义字符串
+ 
+ RFC 3986 规范下需要被保留的字符
+ - ":", "#", "[", "]", "@", "?", "/"
+ - "!", "$", "&", "'", "(", ")", "*", "+", ",", ";", "="
 
- In RFC 3986 - Section 3.4, it states that the "?" and "/" characters should not be escaped to allow
- query strings to include a URL. Therefore, all "reserved" characters with the exception of "?" and "/"
- should be percent-escaped in the query string.
- 
- @param string The string to be percent-escaped.
- 
- @return The percent-escaped string.
+ 在RFC 3986 规范 Section 3.4 下 的查询字段、除了"?","/"以外的特殊字符都应该被转义
  */
 FOUNDATION_EXPORT NSString * AFPercentEscapedStringFromString(NSString *string);
 
 /**
- A helper method to generate encoded url query parameters for appending to the end of a URL.
+ 对字典进行编码
 
- @param parameters A dictionary of key/values to be encoded.
+ 返回编码后的字符串
+ 
 
- @return A url encoded query string
+ NSString * str = AFQueryStringFromParameters(@{@"aaaa":@{@"bbbb":@"cccc",
+ @"dddd":@"eeee"}});
+ 最终会变成 aaaa[bbbb]=cccc&aaaa[dddd]=eeee返回
  */
 FOUNDATION_EXPORT NSString * AFQueryStringFromParameters(NSDictionary *parameters);
 

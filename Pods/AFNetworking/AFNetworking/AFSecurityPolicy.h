@@ -23,9 +23,9 @@
 #import <Security/Security.h>
 
 typedef NS_ENUM(NSUInteger, AFSSLPinningMode) {
-    AFSSLPinningModeNone,
-    AFSSLPinningModePublicKey,
-    AFSSLPinningModeCertificate,
+    AFSSLPinningModeNone,//无条件信任服务器的证书
+    AFSSLPinningModePublicKey,//对服务器返回的证书中的PublicKey进行验证
+    AFSSLPinningModeCertificate,//对服务器返回的证书同本地证书全部进行校验
 };
 
 /**
@@ -39,48 +39,50 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AFSecurityPolicy : NSObject <NSSecureCoding, NSCopying>
 
 /**
- The criteria by which server trust should be evaluated against the pinned SSL certificates. Defaults to `AFSSLPinningModeNone`.
+    SSLPinning 默认 `AFSSLPinningModeNone`
  */
 @property (readonly, nonatomic, assign) AFSSLPinningMode SSLPinningMode;
 
 /**
- The certificates used to evaluate server trust according to the SSL pinning mode. 
+    本地证书合集
 
-  By default, this property is set to any (`.cer`) certificates included in the target compiling AFNetworking. Note that if you are using AFNetworking as embedded framework, no certificates will be pinned by default. Use `certificatesInBundle` to load certificates from your target, and then create a new policy by calling `policyWithPinningMode:withPinnedCertificates`.
+    默认、将会从整个工程目录下加载所有(.cer)的证书文件
+    如果想定制证书、可以使用`certificatesInBundle`来加载证书
+    然后调用`policyWithPinningMode:withPinnedCertificates`来创建一个新`AFSecurityPolicy`对象用于验证
  
- Note that if pinning is enabled, `evaluateServerTrust:forDomain:` will return true if any pinned certificate matches.
+    如果证书合集中任何一个被校验通过、那么`evaluateServerTrust:forDomain:`都将返回true
  */
 @property (nonatomic, strong, nullable) NSSet <NSData *> *pinnedCertificates;
 
 /**
- Whether or not to trust servers with an invalid or expired SSL certificates. Defaults to `NO`.
+    使用允许无效或过期的证书 默认`NO`
  */
 @property (nonatomic, assign) BOOL allowInvalidCertificates;
 
 /**
- Whether or not to validate the domain name in the certificate's CN field. Defaults to `YES`.
+    是否验证域名 默认`YES`
  */
 @property (nonatomic, assign) BOOL validatesDomainName;
 
 ///-----------------------------------------
-/// @name Getting Certificates from the Bundle
+/// @name 获取证书
 ///-----------------------------------------
 
 /**
- Returns any certificates included in the bundle. If you are using AFNetworking as an embedded framework, you must use this method to find the certificates you have included in your app bundle, and use them when creating your security policy by calling `policyWithPinningMode:withPinnedCertificates`.
-
- @return The certificates included in the given bundle.
+    从指定`bundle`中获取证书合集
+    然后调用`policyWithPinningMode:withPinnedCertificates`来创建一个新`AFSecurityPolicy`对象用于验证
  */
 + (NSSet <NSData *> *)certificatesInBundle:(NSBundle *)bundle;
 
 ///-----------------------------------------
-/// @name Getting Specific Security Policies
+/// @name 自定义安全策略
 ///-----------------------------------------
 
 /**
- Returns the shared default security policy, which does not allow invalid certificates, validates domain name, and does not validate against pinned certificates or public keys.
-
- @return The default security policy.
+    默认的安全策略
+    1、不允许无效或过期的证书
+    2、验证域名
+    3、不对证书和公钥进行验证
  */
 + (instancetype)defaultPolicy;
 
@@ -89,21 +91,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///---------------------
 
 /**
- Creates and returns a security policy with the specified pinning mode.
-
- @param pinningMode The SSL pinning mode.
-
- @return A new security policy.
+    通过指定的验证策略`AFSSLPinningMode`来创建
  */
 + (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode;
 
 /**
- Creates and returns a security policy with the specified pinning mode.
-
- @param pinningMode The SSL pinning mode.
- @param pinnedCertificates The certificates to pin against.
-
- @return A new security policy.
+    通过指定的验证策略`AFSSLPinningMode`、以及证书合集来创建
  */
 + (instancetype)policyWithPinningMode:(AFSSLPinningMode)pinningMode withPinnedCertificates:(NSSet <NSData *> *)pinnedCertificates;
 
@@ -112,14 +105,12 @@ NS_ASSUME_NONNULL_BEGIN
 ///------------------------------
 
 /**
- Whether or not the specified server trust should be accepted, based on the security policy.
+    根据具体配置、确定是否接受指定服务器的信任
 
- This method should be used when responding to an authentication challenge from a server.
+    服务器验证时会返回`NSURLCredential`challenge对象
+    @param serverTrust 使用challenge.protectionSpace.serverTrust参数即可
+    @param domain 使用challenge.protectionSpace.host即可
 
- @param serverTrust The X.509 certificate trust of the server.
- @param domain The domain of serverTrust. If `nil`, the domain will not be validated.
-
- @return Whether or not to trust the server.
  */
 - (BOOL)evaluateServerTrust:(SecTrustRef)serverTrust
                   forDomain:(nullable NSString *)domain;

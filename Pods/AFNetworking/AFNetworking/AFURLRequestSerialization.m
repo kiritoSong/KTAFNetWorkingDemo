@@ -44,16 +44,32 @@ typedef NSString * (^AFQueryStringSerializationBlock)(NSURLRequest *request, id 
     - parameter string: The string to be percent-escaped.
     - returns: The percent-escaped string.
  */
+
+
+
+/**
+ 对字符串编码
+ */
 NSString * AFPercentEscapedStringFromString(NSString *string) {
+    //":", "#", "[", "]", "@", "?", "/"  除去"?","/"
     static NSString * const kAFCharactersGeneralDelimitersToEncode = @":#[]@"; // does not include "?" or "/" due to RFC 3986 - Section 3.4
+    
+    //"!", "$", "&", "'", "(", ")", "*", "+", ",", ";", "="
     static NSString * const kAFCharactersSubDelimitersToEncode = @"!$&'()*+,;=";
 
+    
+    //将以上两种设置为排除
     NSMutableCharacterSet * allowedCharacterSet = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    /*
+        只是[NSCharacterSet URLQueryAllowedCharacterSet]的话以上字符默认是不转译的
+        需要移出去。只保留"?"和"/"不转译
+    */
     [allowedCharacterSet removeCharactersInString:[kAFCharactersGeneralDelimitersToEncode stringByAppendingString:kAFCharactersSubDelimitersToEncode]];
 
 	// FIXME: https://github.com/AFNetworking/AFNetworking/pull/3028
     // return [string stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
 
+    //每次最多转译50个字符
     static NSUInteger const batchSize = 50;
 
     NSUInteger index = 0;
@@ -68,8 +84,9 @@ NSString * AFPercentEscapedStringFromString(NSString *string) {
 
         // To avoid breaking up character sequences such as 👴🏻👮🏽
         range = [string rangeOfComposedCharacterSequencesForRange:range];
-
+        
         NSString *substring = [string substringWithRange:range];
+        
         NSString *encoded = [substring stringByAddingPercentEncodingWithAllowedCharacters:allowedCharacterSet];
         [escaped appendString:encoded];
 
@@ -122,9 +139,10 @@ FOUNDATION_EXPORT NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id 
 NSString * AFQueryStringFromParameters(NSDictionary *parameters) {
     NSMutableArray *mutablePairs = [NSMutableArray array];
     for (AFQueryStringPair *pair in AFQueryStringPairsFromDictionary(parameters)) {
+        //将AFQueryStringPair对象转化成key=value的格式并且传递给新的数组
         [mutablePairs addObject:[pair URLEncodedStringValue]];
     }
-
+    //开头添加"&"
     return [mutablePairs componentsJoinedByString:@"&"];
 }
 
@@ -132,18 +150,36 @@ NSArray * AFQueryStringPairsFromDictionary(NSDictionary *dictionary) {
     return AFQueryStringPairsFromKeyAndValue(nil, dictionary);
 }
 
+//把key && value 转成数组
 NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value) {
     NSMutableArray *mutableQueryStringComponents = [NSMutableArray array];
 
+    //排序 升序
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"description" ascending:YES selector:@selector(compare:)];
 
     if ([value isKindOfClass:[NSDictionary class]]) {
+        //参数value为字典
+        
         NSDictionary *dictionary = value;
         // Sort dictionary keys to ensure consistent ordering in query string, which is important when deserializing potentially ambiguous sequences, such as an array of dictionaries
+        
+        /*
+            [dictionary.allKeys sortedArrayUsingDescriptors:@[ sortDescriptor ]
+            对所有的字典里的nestedKey进行排序
+         */
         for (id nestedKey in [dictionary.allKeys sortedArrayUsingDescriptors:@[ sortDescriptor ]]) {
+            //获取nestedKey里的value
             id nestedValue = dictionary[nestedKey];
             if (nestedValue) {
-                [mutableQueryStringComponents addObjectsFromArray:AFQueryStringPairsFromKeyAndValue((key ? [NSString stringWithFormat:@"%@[%@]", key, nestedKey] : nestedKey), nestedValue)];
+                if (key) {
+                    //如果指明了key、则为二级字典。用key[nestedKey]进行遍历
+                    //比如@{aaa:@{bbb:ccc}};就会被变成aaa[bbb]作为key
+                    [mutableQueryStringComponents addObjectsFromArray:AFQueryStringPairsFromKeyAndValue([NSString stringWithFormat:@"%@[%@]", key, nestedKey], nestedValue)];
+                }else {
+                    //如果没有传入nestedKey、则直接为一级字典。用subkey进行遍历
+                    [mutableQueryStringComponents addObjectsFromArray:AFQueryStringPairsFromKeyAndValue(nestedKey, nestedValue)];
+                }
+//                [mutableQueryStringComponents addObjectsFromArray:AFQueryStringPairsFromKeyAndValue((key ? [NSString stringWithFormat:@"%@[%@]", key, nestedKey] : nestedKey), nestedValue)];
             }
         }
     } else if ([value isKindOfClass:[NSArray class]]) {
@@ -157,9 +193,12 @@ NSArray * AFQueryStringPairsFromKeyAndValue(NSString *key, id value) {
             [mutableQueryStringComponents addObjectsFromArray:AFQueryStringPairsFromKeyAndValue(key, obj)];
         }
     } else {
+        //如果是字符串、则将key、value组合
+        //如果是字典的话就会出现key = @"aaaa[bbbb]" value = @"cccc"这种情况、后面会再转化
         [mutableQueryStringComponents addObject:[[AFQueryStringPair alloc] initWithField:key value:value]];
     }
 
+    //返回最终的`AFQueryStringPair`对象数组
     return mutableQueryStringComponents;
 }
 

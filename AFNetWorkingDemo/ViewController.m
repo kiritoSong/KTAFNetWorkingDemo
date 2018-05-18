@@ -9,6 +9,8 @@
 #import "ViewController.h"
 #import <AFNetworking.h>
 
+#import <AssertMacros.h>
+
 @interface ViewController ()
 
 @end
@@ -20,7 +22,30 @@
     // Do any additional setup after loading the view, typically from a nib.
 
     
+}
+
+
+- (void)RequireTest {
+    //断言为假则会执行一下第三个action、抛出异常、并且跳到_out
+    __Require_Action(1, _out, NSLog(@"直接跳"));
+    __Require_Quiet(1,_out);
+    NSLog(@"111");
     
+    //如果不注释、从这里直接就会跳到out
+    //    __Require_Quiet(0,_out);
+    //    NSLog(@"222");
+    
+    //如果没有错误、也就是NO、继续执行
+    __Require_noErr(NO, _out);
+    NSLog(@"333");
+    
+    //如果有错误、也就是YES、跳到_out、并且抛出异常定位
+    __Require_noErr(YES, _out);
+    NSLog(@"444");
+_out:
+    NSLog(@"end");
+    
+
 }
 
 +(NSSet<NSString *> *)keyPathsForValuesAffectingValueForKey:(NSString *)key {
