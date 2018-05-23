@@ -22,6 +22,34 @@
     // Do any additional setup after loading the view, typically from a nib.
 
     
+    /*
+        .h文件
+         AFHTTPRequestSerializer 负责请求的生产
+         AFMultipartFormData 负责上传文件拼接的协议
+         AFJSONRequestSerializer和AFPropertyListRequestSerializer:AFHTTPRequestSerializer的子类
+         可以将参数转化成JSON上传.`Content-Type`分别为`application/JSON`和`application/x-plist`
+         需要配置给AFURLSessionManager.requestSerializer/responseSerializer属性
+     
+        .m文件
+         AFQueryStringPair 将字典的key:value逐个提取出来构造体
+         AFStreamingMultipartFormData 用来整合请求体信息、并且整合进request
+         AFMultipartBodyStream 请求体整合工具(可以将单个`AFHTTPBodyPart`追加)
+         AFHTTPBodyPart 请求体单个片段(也就是单个name) 
+     */
+
+    
+    AFHTTPRequestSerializer * requestSerializer =  [AFHTTPRequestSerializer serializer];
+    [requestSerializer setValue:@"请求头value1" forHTTPHeaderField:@"请求头key1"];
+    [requestSerializer setValue:@"请求头value2" forHTTPHeaderField:@"请求头key2"];
+
+    NSMutableURLRequest * req = [requestSerializer requestWithMethod:@"POST" URLString:@"http://127.0.0.1:3000/" parameters:@{@"key":@"value"} error:nil];
+
+    [[[AFHTTPSessionManager manager] dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+        
+    }] resume] ;
+    
+    
+    
 }
 
 

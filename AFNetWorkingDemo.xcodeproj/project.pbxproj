@@ -22,6 +22,7 @@
 		5FABE1272047D55E0083E16F /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F23670F204648E30068233A /* LaunchScreen.storyboard */; };
 		5FABE1282047D55E0083E16F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F23670D204648E30068233A /* Assets.xcassets */; };
 		5FABE1292047D55E0083E16F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F23670A204648E30068233A /* Main.storyboard */; };
+		5FC9E22420B56C030000C912 /* tu.gif in Resources */ = {isa = PBXBuildFile; fileRef = 5FC9E22320B56C030000C912 /* tu.gif */; };
 		FA6CD0514E68E6C54E76598F /* libPods-AFNetWorkingDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8895DC4E070627B7F8CAF83F /* libPods-AFNetWorkingDemo.a */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +63,7 @@
 		5F23672A204648E40068233A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5FABE12F2047D55E0083E16F /* demo1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = demo1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5FABE1302047D55F0083E16F /* AFNetWorkingDemo copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AFNetWorkingDemo copy-Info.plist"; path = "/Users/kiritoSong/Desktop/博客/AFNetWorking/AFNetWorkingDemo/AFNetWorkingDemo copy-Info.plist"; sourceTree = "<absolute>"; };
+		5FC9E22320B56C030000C912 /* tu.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = tu.gif; sourceTree = "<group>"; };
 		8895DC4E070627B7F8CAF83F /* libPods-AFNetWorkingDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AFNetWorkingDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EB224A8AD83B0FA0E724763 /* Pods-AFNetWorkingDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AFNetWorkingDemo.release.xcconfig"; path = "Pods/Target Support Files/Pods-AFNetWorkingDemo/Pods-AFNetWorkingDemo.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -103,6 +105,7 @@
 		5F2366F8204648E30068233A = {
 			isa = PBXGroup;
 			children = (
+				5FC9E22320B56C030000C912 /* tu.gif */,
 				5F236703204648E30068233A /* AFNetWorkingDemo */,
 				5F23671C204648E30068233A /* AFNetWorkingDemoTests */,
 				5F236727204648E30068233A /* AFNetWorkingDemoUITests */,
@@ -311,6 +314,7 @@
 				5F236711204648E30068233A /* LaunchScreen.storyboard in Resources */,
 				5F23670E204648E30068233A /* Assets.xcassets in Resources */,
 				5F23670C204648E30068233A /* Main.storyboard in Resources */,
+				5FC9E22420B56C030000C912 /* tu.gif in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
