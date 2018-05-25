@@ -681,15 +681,15 @@ static NSString * AFCreateMultipartFormBoundary() {
 }
 
 static NSString * const kAFMultipartFormCRLF = @"\r\n";
-
+//如果是开头分隔符的，那么只需在分隔符结尾加一个换行符
 static inline NSString * AFMultipartFormInitialBoundary(NSString *boundary) {
     return [NSString stringWithFormat:@"--%@%@", boundary, kAFMultipartFormCRLF];
 }
-
+//如果是中间部分分隔符，那么需要分隔符前面和结尾都加换行符
 static inline NSString * AFMultipartFormEncapsulationBoundary(NSString *boundary) {
     return [NSString stringWithFormat:@"%@--%@%@", kAFMultipartFormCRLF, boundary, kAFMultipartFormCRLF];
 }
-
+//如果是末尾，还得使用--分隔符--作为请求体的结束标志
 static inline NSString * AFMultipartFormFinalBoundary(NSString *boundary) {
     return [NSString stringWithFormat:@"%@--%@--%@", kAFMultipartFormCRLF, boundary, kAFMultipartFormCRLF];
 }
@@ -930,6 +930,7 @@ NSTimeInterval const kAFUploadStream3GSuggestedDelay = 0.2;
     //将请求体接入request
     [self.request setHTTPBodyStream:self.bodyStream];
     
+    //multipart协议请求头
     [self.request setValue:[NSString stringWithFormat:@"multipart/form-data; boundary=%@", self.boundary] forHTTPHeaderField:@"Content-Type"];
     [self.request setValue:[NSString stringWithFormat:@"%llu", [self.bodyStream contentLength]] forHTTPHeaderField:@"Content-Length"];
 

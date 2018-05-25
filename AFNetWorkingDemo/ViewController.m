@@ -38,17 +38,17 @@
      */
 
     
-    AFHTTPRequestSerializer * requestSerializer =  [AFHTTPRequestSerializer serializer];
-    [requestSerializer setValue:@"请求头value1" forHTTPHeaderField:@"请求头key1"];
-    [requestSerializer setValue:@"请求头value2" forHTTPHeaderField:@"请求头key2"];
-
-    NSMutableURLRequest * req = [requestSerializer requestWithMethod:@"POST" URLString:@"http://127.0.0.1:3000/" parameters:@{@"key":@"value"} error:nil];
-
-    [[[AFHTTPSessionManager manager] dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
-        
-    }] resume] ;
+//    AFHTTPRequestSerializer * requestSerializer =  [AFHTTPRequestSerializer serializer];
+//    [requestSerializer setValue:@"请求头value1" forHTTPHeaderField:@"请求头key1"];
+//    [requestSerializer setValue:@"请求头value2" forHTTPHeaderField:@"请求头key2"];
+//
+//    NSMutableURLRequest * req = [requestSerializer requestWithMethod:@"POST" URLString:@"http://127.0.0.1:3000/" parameters:@{@"key":@"value"} error:nil];
+//
+//    [[[AFHTTPSessionManager manager] dataTaskWithRequest:req completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
+//
+//    }] resume] ;
     
-    
+    [self uploadFileUseFormWithStreamed];
     
 }
 
